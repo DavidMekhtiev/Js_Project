@@ -12,10 +12,6 @@ app.get('/api/users', async (req, res) => {
     const users = await prisma.users.findMany()
     res.status(200).send(users)
 });
-app.get('/api/companies', async (req, res) => {
-    const companies = await prisma.companies.findMany()
-    res.status(200).send(companies)
-});
 
 app.get('/api/users/:id', async (req, res) => {
     const id  = Number(req.params.id)
@@ -75,27 +71,6 @@ app.delete('/api/users/:id', async (req, res) => {
         res.send(user);
     }else{
         res.status(404).send({status:"not found"});
-    }
-});
-app.get('/api/users/:user_id/companies/', async (req, res) => {
-    const id  = Number(req.params.user_id)
-    const user = await prisma.users.findUnique({
-        where: {
-            id: id
-        },
-        include:{
-            Companies:true
-        }
-    })
-    const companies = await prisma.companies.findUnique({
-        where: {
-            id: user.companies_id
-        }
-    });
-    if (companies !== null) {
-        res.send(companies);
-    }else{
-        res.status(404).send({status:"not found"})
     }
 });
 
